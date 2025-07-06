@@ -10,4 +10,11 @@ package controlador;
  */
 public class HistorialController {
     
+    public void guardar(){
+        //lo que quiera pero que guarde 
+    }
+    public void mostrar(){
+        
+    }
+
 }

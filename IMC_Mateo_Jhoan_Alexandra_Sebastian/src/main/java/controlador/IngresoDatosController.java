@@ -10,4 +10,11 @@ package controlador;
  */
 public class IngresoDatosController {
     
+    public void guardar(){
+        //lo que quiera pero que guarde 
+    }
+    public void mostrar(){
+        
+    }
+
 }
