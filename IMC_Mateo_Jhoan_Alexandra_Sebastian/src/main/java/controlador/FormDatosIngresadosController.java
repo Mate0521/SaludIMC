@@ -36,7 +36,7 @@ public class FormDatosIngresadosController extends HttpServlet{
         String cedula = request.getParameter("cedula");
         String nombre = request.getParameter("nombre");
         String apellidos = request.getParameter("apellidos");
-        String fechaNacStr = request.getParameter("fecha_nac"); // fecha nacimiento usuario
+        String fechaNacStr = request.getParameter("fecha_nac"); 
         String nacionalidad = request.getParameter("nacionalidad");
 
         String pesoStr = request.getParameter("peso");
@@ -46,9 +46,6 @@ public class FormDatosIngresadosController extends HttpServlet{
 
         try {
             // Inicializar variables
-            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-            Date fechaNac = formato.parse(fechaNacStr);
-            Usuario nuevoUsuario = new Usuario(cedula, nombre, apellidos, fechaNac, nacionalidad);
             
             // Validar cedula obligatoria
             if (cedula == null || cedula.trim().isEmpty()) {
@@ -60,9 +57,10 @@ public class FormDatosIngresadosController extends HttpServlet{
 
             // 2. Registrar usuario si se enviaron sus datos
             if (nombre != null && apellidos != null && fechaNacStr != null && nacionalidad != null) {
-               
-
-                user.guardar(cedula, nombre, apellidos, fechaNac, nacionalidad); // asegúrate que tu DAO tenga este método
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaNac = formato.parse(fechaNacStr);
+                
+                user.guardar(cedula, nombre, apellidos, fechaNac, nacionalidad); 
 
                 System.out.println("Usuario registrado correctamente: " + cedula);
             } 
@@ -70,7 +68,7 @@ public class FormDatosIngresadosController extends HttpServlet{
             // 3. Registrar datos de salud si se enviaron
             if (pesoStr != null && estaturaStr != null ) {
                 
-                Usuario usuario = user.obtenerUser (cedula);
+                Usuario usuario = user.obtenerUser(cedula);
                 
                 Date fechaReg = new Date();
 
@@ -78,10 +76,10 @@ public class FormDatosIngresadosController extends HttpServlet{
                 double estatura = Double.parseDouble(estaturaStr);
                 int edad = usuario.edad();
 
-                // Calcular IMC
+                
                 double imc = salud.calcularIMC(peso, estatura);
 
-                // Guardar en base de datos
+                
                 salud.guardar(cedula, fechaReg, peso, estatura, edad, imc);
 
                 System.out.println("Datos de salud registrados correctamente para cédula: " + cedula);
