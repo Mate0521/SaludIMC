@@ -1,0 +1,27 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 6/07/2025, 1:39:50 p. m.
+    Author     : MATEO CARVAJAL
+*/
+    #bod {
+        background-color: #343a40;
+        color: white;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #b {
+        background-color: #343a40; /* Fondo oscuro Bootstrap */
+        color: white; /* Texto blanco por defecto */
+        height: 100vh; /* Altura total de la ventana */
+        margin: 0; /* Quitar margen */
+        display: flex;
+        justify-content: center; /* Centrado horizontal */
+        align-items: center; /* Centrado vertical */
+    }
+
