@@ -15,7 +15,7 @@
     <body>
         <h1>Formulario IMC</h1>
         
-        <form id="formularioCompleto" method="POST">
+        <form id="" action="FormDatosIngresadosContrller" method="POST">
 
             <div id="data-component" class="mt-4">
                 <!-- Aquí se cargarán los formularios vía AJAX -->
