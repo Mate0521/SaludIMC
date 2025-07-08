@@ -9,7 +9,8 @@ package dao;
  * @author MATEO CARVAJAL
  */
 public class SaludDAO {
-    public void insertar(){
+    public String insertar(){
+        return "INSERT INTO salud (cedula, fecha_reg, peso, estatura, edad, imc) VALUES (?, ?, ?, ?, ?, ?)";
     }
     
     public String mostrar(String cedula){

@@ -24,6 +24,8 @@ import modelo.Usuario;
 @WebServlet(name = "FormController", urlPatterns = {"/FormController"})
 public class FormController extends HttpServlet {
     Usuario user = new Usuario();
+    Salud salud = new Salud();
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +42,6 @@ public class FormController extends HttpServlet {
         if (cedula != null && !cedula.trim().isEmpty()) {
             try {
                 // 3. Crear instancia de Usuario y consultar
-                Usuario user = new Usuario();
                 Usuario usuario = user.obtenerUser(cedula);
 
                 // 4. Determinar el resultado
@@ -65,61 +66,40 @@ public class FormController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String fechaNacStr = request.getParameter("fecha_nac_usuario");
-        Date fechaNac = null;
 
-        if (fechaNacStr != null && !fechaNacStr.isEmpty()) {
-            try {
-                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-                fechaNac = formato.parse(fechaNacStr);
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Maneja el error: formato inválido o null
-            }
-        }
-
-        // Configura encoding para caracteres latinos y UTF-8
         request.setCharacterEncoding("UTF-8");
 
-        // 1. Obtener todos los parámetros posibles
-
-        // Datos de Usuario
-        String cedula = request.getParameter("cedula_usuario");
-        String nombre = request.getParameter("nombre_usuario");
-        String apellidos = request.getParameter("apellidos_usuario");
-        String nacionalidad = request.getParameter("nacionalidad_usuario");
-
-        // Datos de Salud
-        String pesoStr = request.getParameter("peso_salud");
-        String estaturaStr = request.getParameter("estatura_salud");
-
-        // 2. Procesar lógica dependiendo de qué datos llegaron
+        // 1. Obtener los datos del formulario
+        String cedula = request.getParameter("cedula");
+        String fechaRegStr = request.getParameter("fecha_reg");
+        String pesoStr = request.getParameter("peso");
+        String estaturaStr = request.getParameter("estatura");
+        String edadStr = request.getParameter("edad");
 
         try {
-            if (cedula != null && nombre != null) {
-                // Registro de nuevo usuario
-                Usuario nuevoUsuario = new Usuario(cedula, nombre, apellidos, fechaNac, nacionalidad);
-                // Llama a tu DAO para guardar
+            if (cedula != null && fechaRegStr != null && pesoStr != null && estaturaStr != null && edadStr != null) {
 
-                user.guardar(nuevoUsuario);
-            }
+                // 2. Convertir a tipos correctos
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaReg = formato.parse(fechaRegStr);
 
-            if (pesoStr != null && estaturaStr != null) {
-                // Registro de datos de salud
                 double peso = Double.parseDouble(pesoStr);
                 double estatura = Double.parseDouble(estaturaStr);
-                LocalDate fechaActual = java.time.LocalDate.now();
-                
+                int edad = Integer.parseInt(edadStr);
 
-                Salud salud;//Salud(Date fecha_reg, double peso, int edad, double estatura)
-                salud = new Salud(fechaActual,peso, , estatura);
-                
-                salud.guardar(salud);
+                // 3. Calcular IMC
+                double imc =salud.calcularIMC(peso, estatura);
+
+                // 4. Insertar en base de datos
+                salud.guardar(cedula, fechaReg, peso, estatura, edad, imc);
+
+                // 5. Redireccionar a página de éxito
+                response.sendRedirect("exito.jsp");
+
+            } else {
+                // Datos incompletos
+                response.sendRedirect("error.jsp");
             }
-
-            // 3. Respuesta: redirigir o devolver JSON de éxito
-            response.sendRedirect("exito.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
