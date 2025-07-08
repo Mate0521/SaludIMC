@@ -11,9 +11,9 @@ import modelo.Usuario;
  * @author MATEO CARVAJAL
  */
 public class UsuarioDAO {
-    public String insertar(Usuario user){
-        return "INSERT INTO `usuario`(`cedula`, `nombre`, `apellidos`, `fecha_nac`, `nacionalidad`) "
-             + "VALUES ('"+user.getCedula()+"','"+user.getNombre()+"','"+user.getApellidos()+"','"+user.getFecha_nac()+"','"+user.getNacionalidad()+"')";
+    
+    public String insertar() {
+        return "INSERT INTO usuario (cedula, nombre, apellidos, fecha_nac, nacionalidad) VALUES (?, ?, ?, ?, ?)";
     }
     
     public String mostrar(String cedula){

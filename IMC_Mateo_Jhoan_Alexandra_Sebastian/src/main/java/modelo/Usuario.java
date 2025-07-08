@@ -77,9 +77,30 @@ public class Usuario {
         this.nacionalidad = nacionalidad;
     }
     
-    public void guardar(Usuario user){
-        //aqui pa guardar utice el dao que corresponde
+    public void guardar(String cedula, String nombre, String apellidos, java.util.Date fecha_nac, String nacionalidad) throws Exception {
+        UsuarioDAO userDAO = new UsuarioDAO();
+        String sql = userDAO.insertar(); // ahora no recibe ningún parámetro
+
+        try {
+            int filasAfectadas = Conexion.ejecutarActualizacion(
+                sql,
+                cedula,
+                nombre,
+                apellidos,
+                new java.sql.Date(fecha_nac.getTime()),
+                nacionalidad
+            );
+
+            if (filasAfectadas == 0) {
+                throw new Exception("No se insertó ningún usuario.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error al insertar usuario: " + e.getMessage());
+        }
     }
+
     public Usuario obtenerUser(String cedula) throws Exception {
         Usuario usuarioObj = null;
         UsuarioDAO userDAO = new UsuarioDAO();

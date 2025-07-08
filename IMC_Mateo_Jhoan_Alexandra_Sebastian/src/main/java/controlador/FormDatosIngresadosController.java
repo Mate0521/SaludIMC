@@ -41,24 +41,28 @@ public class FormDatosIngresadosController extends HttpServlet{
 
         String pesoStr = request.getParameter("peso");
         String estaturaStr = request.getParameter("estatura");
+        
 
 
         try {
+            // Inicializar variables
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaNac = formato.parse(fechaNacStr);
+            Usuario nuevoUsuario = new Usuario(cedula, nombre, apellidos, fechaNac, nacionalidad);
+            
             // Validar cedula obligatoria
             if (cedula == null || cedula.trim().isEmpty()) {
                 response.sendRedirect("index.jsp");
                 return;
             }
 
-            // Inicializar variables
-            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            
 
             // 2. Registrar usuario si se enviaron sus datos
             if (nombre != null && apellidos != null && fechaNacStr != null && nacionalidad != null) {
-                Date fechaNac = formato.parse(fechaNacStr);
-                Usuario nuevoUsuario = new Usuario(cedula, nombre, apellidos, fechaNac, nacionalidad);
+               
 
-                user.guardar(nuevoUsuario); // asegúrate que tu DAO tenga este método
+                user.guardar(cedula, nombre, apellidos, fechaNac, nacionalidad); // asegúrate que tu DAO tenga este método
 
                 System.out.println("Usuario registrado correctamente: " + cedula);
             } 
