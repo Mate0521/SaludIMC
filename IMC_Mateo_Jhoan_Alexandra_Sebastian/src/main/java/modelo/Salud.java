@@ -8,6 +8,7 @@ import conexion.Conexion;
 import dao.SaludDAO;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class Salud {
     }
     
     
-    public void guardar(){
+    public void guardar(Salud salud){
         //aqui pa guardar utice el dao que corresponde
     }
     
@@ -97,6 +98,7 @@ public class Salud {
         }
         return lista;
     }
+
 
     
     
