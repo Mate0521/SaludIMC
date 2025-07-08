@@ -24,42 +24,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     justify-content: center; /* Centrado horizontal */
     align-items: center; /* Centrado vertical */
 }
-
 #bajo {
     background-color: #f0ad4e; /* Naranja claro */
     color: white;
     font-weight: bold;
     text-align: center;
 }
-
 #normal {
     background-color: #5cb85c; /* Verde */
     color: white;
     font-weight: bold;
     text-align: center;
 }
-
 #sobrepeso {
     background-color: #f0ad4e; /* Naranja */
     color: white;
     font-weight: bold;
     text-align: center;
 }
-
 #obesidad1 {
     background-color: #d9534f; /* Rojo claro */
     color: white;
     font-weight: bold;
     text-align: center;
 }
-
 #obesidad2 {
     background-color: #c9302c; /* Rojo fuerte */
     color: white;
     font-weight: bold;
     text-align: center;
 }
-
 #obesidad3 {
     background-color: #ac2925; /* Rojo muy fuerte */
     color: white;
