@@ -56,10 +56,6 @@
                             if (response.resultado === "existe") {
                                 // Usuario existe: cargar solo SaludForm.jsp
                                 $.ajax({
-<<<<<<< HEAD
-                                    
-=======
->>>>>>> 96025376ab3874fc2afe337f808aa8320320c59c
                                     url: "ajax/formularioSalud.jsp",
                                     type: "GET",
                                     success: function(data) {

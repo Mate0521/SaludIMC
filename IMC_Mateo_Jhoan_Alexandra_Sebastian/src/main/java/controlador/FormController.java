@@ -113,9 +113,9 @@ public class FormController extends HttpServlet {
                 
 
                 Salud salud;//Salud(Date fecha_reg, double peso, int edad, double estatura)
-                salud = new Salud(fechaActual,peso, , estatura);
+//                salud = new Salud(fechaActual,peso, , estatura);
                 
-                salud.guardar(salud);
+//                salud.guardar(salud);
             }
 
             // 3. Respuesta: redirigir o devolver JSON de éxito
