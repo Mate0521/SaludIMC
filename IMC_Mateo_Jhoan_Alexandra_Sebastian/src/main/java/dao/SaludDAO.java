@@ -13,7 +13,7 @@ public class SaludDAO {
     }
     
     public String mostrar(String cedula){
-        return "sentecia sql";
+        return "SELECT cedula, fecha_reg, peso, estatura, edad, imc FROM salud WHERE cedula = " + cedula;
     }
     
 }

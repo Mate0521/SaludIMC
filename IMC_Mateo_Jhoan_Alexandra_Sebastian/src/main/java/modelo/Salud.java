@@ -4,8 +4,12 @@
  */
 package modelo;
 
+import conexion.Conexion;
 import dao.SaludDAO;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -16,6 +20,8 @@ public class Salud {
     private double peso;
     private int  edad;
     private double estatura; 
+    private double imc;
+    
     
 
     public Salud() {
@@ -45,12 +51,11 @@ public class Salud {
     }
 
     public int getEdad() {
-        //coloque la logica para calcular la edad y guardar depende del aptributo fecha_nac de usuario
-    return 0;
+        return this.edad;
     }
-
-    public void setEdad(int edad) {
-       //coloque la logica para calcular la edad y guardar lo mismo como lo quieran aplicar 
+    
+    public void  setEdad(int edad){
+        this.edad=edad;
     }
 
     public double getEstatura() {
@@ -60,13 +65,39 @@ public class Salud {
     public void setEstatura(double estatura) {
         this.estatura = estatura;
     }
+
+    public double getImc() {
+        return imc;
+    }
+
+    public void setImc(double imc) {
+        this.imc = imc;
+    }
+    
     
     public void guardar(){
         //aqui pa guardar utice el dao que corresponde
     }
-    public String mostrar(){
-        return "";
+    
+    public List<Salud> obtenerHistorial(String cedula) throws Exception {
         
+        SaludDAO saludDAO =new SaludDAO();
+        
+        List<Salud> lista = new ArrayList<>();
+        ResultSet rs = Conexion.ejecutarConsulta(saludDAO.mostrar(cedula));
+
+        while (rs.next()) {
+            Salud salud = new Salud();
+            salud.setFecha_reg(rs.getDate("fecha_reg"));
+            salud.setPeso(rs.getDouble("peso"));
+            salud.setEstatura(rs.getDouble("estatura"));
+            salud.setEdad(rs.getInt("edad"));
+            salud.setImc(rs.getDouble("imc"));
+            lista.add(salud);
+        }
+        return lista;
     }
+
+    
     
 }

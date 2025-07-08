@@ -14,12 +14,22 @@
   <!-- Configuración de Servlets -->
   <servlet>
     <servlet-name>SaludController</servlet-name>
-    <servlet-class>com.empresa.controller.SaludController</servlet-class>
+    <servlet-class>controlador.SaludController</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>SaludController</servlet-name>
     <url-pattern>/SaludController</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>HistorialController</servlet-name>
+    <servlet-class>controlador.HistorialController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>HistorialController</servlet-name>
+    <url-pattern>/HistorialController</url-pattern>
   </servlet-mapping>
 
   <!-- Página de inicio -->

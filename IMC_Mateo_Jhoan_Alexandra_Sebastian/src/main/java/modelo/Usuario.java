@@ -4,6 +4,12 @@
  */
 package modelo;
 
+import conexion.Conexion;
+import dao.UsuarioDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 
@@ -73,10 +79,34 @@ public class Usuario {
     public void guardar(){
         //aqui pa guardar utice el dao que corresponde
     }
-    public String mostrar(){
-        return "";
-        
+    public Usuario obtenerUser(String cedula) throws Exception {
+        Usuario usuarioObj = null;
+        UsuarioDAO userDAO = new UsuarioDAO();
+
+        String sql = userDAO.mostrar(cedula);
+
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                usuarioObj = new Usuario();
+                usuarioObj.setCedula(rs.getString("cedula"));
+                usuarioObj.setNombre(rs.getString("nombre"));
+                usuarioObj.setApellidos(rs.getString("apellidos"));
+                usuarioObj.setFecha_nac(rs.getDate("fecha_nac"));
+                usuarioObj.setNacionalidad(rs.getString("nacionalidad"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error al obtener usuario: " + e.getMessage());
+        }
+
+        return usuarioObj;
     }
+
+
+    
     
     
 }
