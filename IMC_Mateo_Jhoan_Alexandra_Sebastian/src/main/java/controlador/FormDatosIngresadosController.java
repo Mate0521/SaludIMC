@@ -4,6 +4,7 @@
  */
 package controlador;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,53 +25,77 @@ public class FormDatosIngresadosController extends HttpServlet{
     Usuario user = new Usuario();
     Salud salud = new Salud();
     
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
 
-        // 1. Obtener los datos del formulario
+        // 1. Obtener parámetros comunes
         String cedula = request.getParameter("cedula");
         String nombre = request.getParameter("nombre");
         String apellidos = request.getParameter("apellidos");
-        String fechaRegStr = request.getParameter("fecha_reg");
-        String nacionalidad = request.getParameter("nacionaldad");
+        String fechaNacStr = request.getParameter("fecha_nac"); // fecha nacimiento usuario
+        String nacionalidad = request.getParameter("nacionalidad");
+
         String pesoStr = request.getParameter("peso");
         String estaturaStr = request.getParameter("estatura");
-        String edadStr = request.getParameter("edad");
-        
+
 
         try {
-            if (cedula != null && fechaRegStr != null && pesoStr != null && estaturaStr != null && edadStr != null) {
+            // Validar cedula obligatoria
+            if (cedula == null || cedula.trim().isEmpty()) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
 
-                // 2. Convertir a tipos correctos
-                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-                Date fechaReg = formato.parse(fechaRegStr);
+            // Inicializar variables
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+            // 2. Registrar usuario si se enviaron sus datos
+            if (nombre != null && apellidos != null && fechaNacStr != null && nacionalidad != null) {
+                Date fechaNac = formato.parse(fechaNacStr);
+                Usuario nuevoUsuario = new Usuario(cedula, nombre, apellidos, fechaNac, nacionalidad);
+
+                user.guardar(nuevoUsuario); // asegúrate que tu DAO tenga este método
+
+                System.out.println("Usuario registrado correctamente: " + cedula);
+            } 
+
+            // 3. Registrar datos de salud si se enviaron
+            if (pesoStr != null && estaturaStr != null ) {
+                
+                Usuario usuario = user.obtenerUser (cedula);
+                
+                Date fechaReg = new Date();
 
                 double peso = Double.parseDouble(pesoStr);
                 double estatura = Double.parseDouble(estaturaStr);
-                int edad = Integer.parseInt(edadStr);
+                int edad = usuario.edad();
 
-                // 3. Calcular IMC
-                double imc =salud.calcularIMC(peso, estatura);
+                // Calcular IMC
+                double imc = salud.calcularIMC(peso, estatura);
 
-                // 4. Insertar en base de datos
+                // Guardar en base de datos
                 salud.guardar(cedula, fechaReg, peso, estatura, edad, imc);
 
-                // 5. Redireccionar a página de éxito
-                response.sendRedirect("exito.jsp");
+                System.out.println("Datos de salud registrados correctamente para cédula: " + cedula);
 
+                // Redirigir a historial
+               response.sendRedirect("historialDatos.jsp");
             } else {
-                // Datos incompletos
-                response.sendRedirect("error.jsp");
+                System.out.println("No se enviaron datos de salud completos");
+                response.sendRedirect("index.jsp");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
         }
+
     }
+
 
     
 }

@@ -41,6 +41,16 @@
     <servlet-name>FormController</servlet-name>
     <url-pattern>/FormController</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>FormDatosIngresadosController</servlet-name>
+    <servlet-class>controlador.FormDatosIngresadosController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>FormDatosIngresadosController</servlet-name>
+    <url-pattern>/FormDatosIngresadosController</url-pattern>
+  </servlet-mapping>
 
   <!-- Página de inicio -->
   <welcome-file-list>

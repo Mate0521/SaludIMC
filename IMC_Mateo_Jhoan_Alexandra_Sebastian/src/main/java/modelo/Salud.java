@@ -80,29 +80,29 @@ public class Salud {
     
     
     public void guardar(String cedula, Date fecha_reg, double peso, double estatura, int edad, double imc) throws Exception {
-        SaludDAO saludDAO =new  SaludDAO();
+        SaludDAO saludDAO = new SaludDAO();
 
-        try (Connection conn = Conexion.getConnection();
+        try {
+            int filasAfectadas = Conexion.ejecutarActualizacion(
+                saludDAO.insertar(),
+                cedula,
+                new java.sql.Date(fecha_reg.getTime()),
+                peso,
+                estatura,
+                edad,
+                imc
+            );
 
-             PreparedStatement ps = conn.prepareStatement(saludDAO.insertar())) {
-
-            ps.setString(1, cedula);
-            ps.setDate(2, new java.sql.Date(fecha_reg.getTime()));
-            ps.setDouble(3, peso);
-            ps.setDouble(4, estatura);
-            ps.setInt(5, edad);
-            ps.setDouble(6, imc);
-            ps.executeUpdate();
+            if (filasAfectadas == 0) {
+                throw new Exception("No se insertó ninguna fila en la base de datos.");
+            }
 
         } catch (SQLException e) {
-
             e.printStackTrace();
-
             throw new Exception("Error al insertar datos de salud: " + e.getMessage());
-
         }
-
     }
+
     
     public List<Salud> obtenerHistorial(String cedula) throws Exception {
         

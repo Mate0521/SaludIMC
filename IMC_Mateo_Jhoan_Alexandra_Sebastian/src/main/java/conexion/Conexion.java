@@ -14,9 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 
-public class Conexion implements AutoCloseable{
+public class Conexion {
 
     // Configuración de la base de datos
     private static final String URL = "jdbc:mysql://localhost:3306/imc?zeroDateTimeBehavior=CONVERT_TO_NULL ";
@@ -67,12 +68,18 @@ public class Conexion implements AutoCloseable{
             }
         }
     }
+    public static int ejecutarActualizacion(String sql, Object... parametros) throws Exception {
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    @Override
-    public void close() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (int i = 0; i < parametros.length; i++) {
+            ps.setObject(i + 1, parametros[i]);
+        }
+
+        return ps.executeUpdate();
     }
-    
+}
+
 
 
 }

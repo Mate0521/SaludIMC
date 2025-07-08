@@ -15,7 +15,12 @@
     <body>
         <h1>Formulario IMC</h1>
         
-        <form id="" action="FormDatosIngresadosContrller" method="POST">
+        <form id="" action="FormDatosIngresadosController" method="POST">
+            
+            <div class="mb-3">
+                <label for="cedula" class="form-label">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" class="form-control" />
+            </div>
 
             <div id="data-component" class="mt-4">
                 <!-- Aquí se cargarán los formularios vía AJAX -->
@@ -23,8 +28,9 @@
 
             <div class="text-center">
                 <button type="submit" name="action" value="guardar" id="guardar" class="btn btn-primary mx-2">Guardar Información</button>
-                <button type="submit" name="action" value="verRegistros" id="verRegistros" class="btn btn-secondary mx-2">Ver registro de anteriores consultas</button>
+                <button name="action"  value="verRegistros" id="verRegistros" class="btn btn-secondary mx-2">Ver registro de anteriores consultas</button>
             </div>
+            
         </form>
         
         
@@ -98,54 +104,7 @@
                     alert("No se encontró el parámetro 'cedula' en la URL.");
                 }
             });
-            $(document).on("click", "#guardar", function(e) {
-                e.preventDefault();
-
-                // Construir un objeto con los datos de ambos formularios
-                let datos = {
-                    cedula: $("#cedula").val(),
-                    nombre: $("#nombre").val(),
-                    apellidos: $("#apellidos").val(),
-                    fecha_nac: $("#fecha_nac").val(),
-                    nacionalidad: $("#nacionalidad").val(),
-                    peso: $("#peso").val(),
-                    estatura: $("#estatura").val()
-                };
-
-                console.log("Datos a enviar:", datos); // Debug
-
-                // Enviar vía AJAX POST a tu controlador
-                $.ajax({
-                    url: "FormController", // Ajusta si tu servlet mapping es diferente
-                    type: "POST",
-                    data: datos,
-                    success: function(response) {
-                        alert("Datos guardados correctamente.");
-                        console.log("Respuesta del servidor:", response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error al guardar:", status, error);
-                        alert("Error al guardar la información.");
-                    }
-                });
-            });
-
-            $('#varRegistros').on('click', function (e) {
-                e.preventDefault();
-                 $.ajax({
-                    url: 'HistorialController', // Cambia la URL para llamar al servlet
-                    type: 'GET',
-                    data: { 
-                        cedula: $('#cedula').val() 
-                    },
-                    success: function(response) {
-                        $('#data-component').html(response);
-                    },
-                    error: function() {
-                        alert('Error al consultar historial');
-                    }
-                });
-            });
+            
         </script>
     </body>
 </html>

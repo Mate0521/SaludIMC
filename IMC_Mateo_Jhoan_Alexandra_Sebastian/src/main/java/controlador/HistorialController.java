@@ -39,6 +39,7 @@ public class HistorialController extends HttpServlet{
                 // Redirigir a la página JSP
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/ajax/tablaHistorialRegistros.jsp");
                 dispatcher.forward(request, response);
+                
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("error", "Error al obtener los datos del usuario.");

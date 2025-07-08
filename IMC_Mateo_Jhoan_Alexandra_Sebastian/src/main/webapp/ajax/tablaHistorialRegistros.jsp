@@ -8,7 +8,7 @@
 <%@ page import="modelo.Salud" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
 <%
     Usuario usuario = (Usuario) request.getAttribute("usuario");
@@ -99,4 +99,3 @@
         </table>
     </div>
 </div>
-
