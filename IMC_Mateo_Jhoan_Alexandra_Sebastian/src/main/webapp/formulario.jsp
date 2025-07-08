@@ -9,87 +9,88 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Formulario</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        
+        <h1>Formulario IMC</h1>
+
         <div id="data-component" class="mt-4">
-            <!-- Aquí se cargarán los eventos del ajax -->
+            <!-- Aquí se cargarán los formularios vía AJAX -->
         </div>
-        
+
         <div class="text-center">
-        <button type="submit" name="action" value="guardar" class="btn btn-primary mx-2">Guardar Información</button>
-        <button type="submit" name="action" value="verRegistros" class="btn btn-secondary mx-2">Ver registro de anteriores consultas</button>
+            <button type="submit" name="action" value="guardar" class="btn btn-primary mx-2">Guardar Información</button>
+            <button type="submit" name="action" value="verRegistros" class="btn btn-secondary mx-2">Ver registro de anteriores consultas</button>
         </div>
-    
-    </body>
 
-
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-
-            function getParameterByName(name) {
-                const url = window.location.href;
-                const paramName = name.replace(/[\[\]]/g, '\\$&');
-                const regex = new RegExp('[?&]' + paramName + '(=([^&#]*)|&|#|$)');
-                const results = regex.exec(url);
+        <script>
+            // Función para obtener parámetros GET desde la URL
+            function getParameterByName(name, url = window.location.href) {
+                name = name.replace(/[\[\]]/g, '\\$&');
+                const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                      results = regex.exec(url);
                 if (!results) return null;
                 if (!results[2]) return '';
                 return decodeURIComponent(results[2].replace(/\+/g, ' '));
             }
 
-            function cargarFormularios(cedula) {
-                $.ajax({
-                    url: "FormController",
-                    type: "GET",
-                    data: { cedula: cedula },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.resultado === "existe") {
-                            // Usuario existe: cargar solo salud
-                            $.ajax({
-                                url: "SaludForm.jsp",
-                                type: "GET",
-                                success: function(data) {
-                                    $("#data-component").html(data);
-                                }
-                            });
-                        } else {
-                            // Usuario no existe: cargar ambos formularios
-                            $.ajax({
-                                url: "UsuarioForm.jsp",
-                                type: "GET",
-                                success: function(dataUsuario) {
-                                    $("#data-component").html(dataUsuario);
-                                    $.ajax({
-                                        url: "SaludForm.jsp",
-                                        type: "GET",
-                                        success: function(dataSalud) {
-                                            $("#data-component").append(dataSalud);
-                                        }
-                                    });
-                                }
-                            });
+            $(document).ready(function () {
+                const cedulaParam = getParameterByName('cedula');
+
+                if (cedulaParam) {
+                    // AJAX principal al FormController
+                    $.ajax({
+                        url: "FormController",
+                        type: "GET",
+                        data: { cedula: cedulaParam },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.resultado === "existe") {
+                                // Usuario existe: cargar solo SaludForm.jsp
+                                $.ajax({
+                                    url: "formularioSalud.jsp",
+                                    type: "GET",
+                                    success: function(data) {
+                                        $("#data-component").html(data);
+                                    },
+                                    error: function() {
+                                        alert("Error cargando SaludForm.jsp");
+                                    }
+                                });
+                            } else {
+                                // Usuario no existe: cargar UsuarioForm.jsp y luego SaludForm.jsp
+                                $.ajax({
+                                    url: "formularioUsuario.jsp",
+                                    type: "GET",
+                                    success: function(dataUsuario) {
+                                        $("#data-component").html(dataUsuario);
+                                        $.ajax({
+                                            url: "formularioSalud.jsp",
+                                            type: "GET",
+                                            success: function(dataSalud) {
+                                                $("#data-component").append(dataSalud);
+                                            },
+                                            error: function() {
+                                                alert("Error cargando SaludForm.jsp");
+                                            }
+                                        });
+                                    },
+                                    error: function() {
+                                        alert("Error cargando UsuarioForm.jsp");
+                                    }
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error AJAX FormController:", status, error);
+                            alert("Error al verificar la cédula en FormController.");
                         }
-                    },
-                    error: function() {
-                        alert("Error al verificar la cédula.");
-                    }
-                });
-            }
-
-            // Obtener parámetro cedula al cargar la página
-            const cedulaParam = getParameterByName('cedula');
-            if (cedulaParam) {
-                // Llamar función que decide qué formularios cargar
-                cargarFormularios(cedulaParam);
-            }
-
-        });
-    </script>
-
+                    });
+                } else {
+                    alert("No se encontró el parámetro 'cedula' en la URL.");
+                }
+            });
+        </script>
+    </body>
 </html>
