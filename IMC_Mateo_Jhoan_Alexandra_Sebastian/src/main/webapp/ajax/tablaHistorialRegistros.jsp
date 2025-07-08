@@ -57,6 +57,7 @@
                     <td><%= s.getEstatura() %></td>
                     <td><%= s.getEdad() %></td>
                     <td><%= s.getImc() %></td>
+                    
                 </tr>
                 <%
                         }

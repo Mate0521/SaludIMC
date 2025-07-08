@@ -31,6 +31,16 @@
     <servlet-name>HistorialController</servlet-name>
     <url-pattern>/HistorialController</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>FormController</servlet-name>
+    <servlet-class>controlador.FormController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>FormController</servlet-name>
+    <url-pattern>/FormController</url-pattern>
+  </servlet-mapping>
 
   <!-- Página de inicio -->
   <welcome-file-list>
