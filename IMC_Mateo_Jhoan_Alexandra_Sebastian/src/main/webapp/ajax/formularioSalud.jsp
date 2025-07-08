@@ -8,6 +8,7 @@
 <h5 class="mb-3">Datos de Salud</h5>
 
 <div class="mb-3">
+
     <label for="peso_salud" class="form-label">Peso (kg):</label>
     <input type="text" id="peso_salud" name="peso" class="form-control" />
 </div>
@@ -15,7 +16,6 @@
 <div class="mb-3">
     <label for="estatura_salud" class="form-label">Estatura (m):</label>
     <input type="text" id="estatura_salud" name="estatura" class="form-control" />
-</div>
 
 <!-- Resultado del IMC -->
 <div class="mb-3">
