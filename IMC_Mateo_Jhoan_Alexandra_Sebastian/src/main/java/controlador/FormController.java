@@ -87,6 +87,7 @@ public class FormController extends HttpServlet {
                 double estatura = Double.parseDouble(estaturaStr);
                 int edad = Integer.parseInt(edadStr);
 
+
                 // 3. Calcular IMC
                 double imc =salud.calcularIMC(peso, estatura);
 
@@ -99,6 +100,7 @@ public class FormController extends HttpServlet {
             } else {
                 // Datos incompletos
                 response.sendRedirect("error.jsp");
+
             }
 
         } catch (Exception e) {
