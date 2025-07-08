@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -76,7 +77,7 @@ public class Usuario {
         this.nacionalidad = nacionalidad;
     }
     
-    public void guardar(){
+    public void guardar(Usuario user){
         //aqui pa guardar utice el dao que corresponde
     }
     public Usuario obtenerUser(String cedula) throws Exception {
@@ -105,6 +106,21 @@ public class Usuario {
         return usuarioObj;
     }
 
+    public int edad() {
+        Calendar fechaActual = Calendar.getInstance();
+        Calendar fechaNacimiento = Calendar.getInstance();
+        fechaNacimiento.setTime(this.getFecha_nac());
+
+        int edad = fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+
+        if (fechaActual.get(Calendar.MONTH) + 1 == fechaNacimiento.get(Calendar.MONTH) + 1 &&
+            fechaNacimiento.get(Calendar.DAY_OF_MONTH) > fechaActual.get(Calendar.DAY_OF_MONTH)) {
+            edad--;
+        } else if (fechaActual.get(Calendar.MONTH) + 1 < fechaNacimiento.get(Calendar.MONTH) + 1) {
+            edad--;
+        }
+        return edad;
+    }
 
     
     
