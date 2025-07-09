@@ -11,16 +11,6 @@
     </session-timeout>
   </session-config>
 
-  <!-- Configuración de Servlets -->
-  <servlet>
-    <servlet-name>SaludController</servlet-name>
-    <servlet-class>controlador.SaludController</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>SaludController</servlet-name>
-    <url-pattern>/SaludController</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>HistorialController</servlet-name>
