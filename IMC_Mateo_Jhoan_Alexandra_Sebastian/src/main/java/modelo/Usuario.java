@@ -4,6 +4,13 @@
  */
 package modelo;
 
+import conexion.Conexion;
+import dao.UsuarioDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -70,13 +77,73 @@ public class Usuario {
         this.nacionalidad = nacionalidad;
     }
     
-    public void guardar(){
-        //aqui pa guardar utice el dao que corresponde
+    public void guardar(String cedula, String nombre, String apellidos, java.util.Date fecha_nac, String nacionalidad) throws Exception {
+        UsuarioDAO userDAO = new UsuarioDAO();
+        String sql = userDAO.insertar(); // ahora no recibe ningún parámetro
+
+        try {
+            int filasAfectadas = Conexion.ejecutarActualizacion(
+                sql,
+                cedula,
+                nombre,
+                apellidos,
+                new java.sql.Date(fecha_nac.getTime()),
+                nacionalidad
+            );
+
+            if (filasAfectadas == 0) {
+                throw new Exception("No se insertó ningún usuario.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error al insertar usuario: " + e.getMessage());
+        }
     }
-    public String mostrar(){
-        return "";
-        
+
+    public Usuario obtenerUser(String cedula) throws Exception {
+        Usuario usuarioObj = null;
+        UsuarioDAO userDAO = new UsuarioDAO();
+
+        String sql = userDAO.mostrar(cedula);
+
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                usuarioObj = new Usuario();
+                usuarioObj.setCedula(rs.getString("cedula"));
+                usuarioObj.setNombre(rs.getString("nombre"));
+                usuarioObj.setApellidos(rs.getString("apellidos"));
+                usuarioObj.setFecha_nac(rs.getDate("fecha_nac"));
+                usuarioObj.setNacionalidad(rs.getString("nacionalidad"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error al obtener usuario: " + e.getMessage());
+        }
+
+        return usuarioObj;
     }
+
+    public int edad() {
+        Calendar fechaActual = Calendar.getInstance();
+        Calendar fechaNacimiento = Calendar.getInstance();
+        fechaNacimiento.setTime(this.getFecha_nac());
+
+        int edad = fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+
+        if (fechaActual.get(Calendar.MONTH) + 1 == fechaNacimiento.get(Calendar.MONTH) + 1 &&
+            fechaNacimiento.get(Calendar.DAY_OF_MONTH) > fechaActual.get(Calendar.DAY_OF_MONTH)) {
+            edad--;
+        } else if (fechaActual.get(Calendar.MONTH) + 1 < fechaNacimiento.get(Calendar.MONTH) + 1) {
+            edad--;
+        }
+        return edad;
+    }
+
+    
     
     
 }

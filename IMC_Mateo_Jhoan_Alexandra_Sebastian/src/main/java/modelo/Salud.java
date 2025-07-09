@@ -4,8 +4,16 @@
  */
 package modelo;
 
+import conexion.Conexion;
 import dao.SaludDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -16,6 +24,8 @@ public class Salud {
     private double peso;
     private int  edad;
     private double estatura; 
+    private double imc;
+    
     
 
     public Salud() {
@@ -45,12 +55,11 @@ public class Salud {
     }
 
     public int getEdad() {
-        //coloque la logica para calcular la edad y guardar depende del aptributo fecha_nac de usuario
-    return 0;
+        return this.edad;
     }
-
-    public void setEdad(int edad) {
-       //coloque la logica para calcular la edad y guardar lo mismo como lo quieran aplicar 
+    
+    public void  setEdad(int edad){
+        this.edad=edad;
     }
 
     public double getEstatura() {
@@ -60,13 +69,65 @@ public class Salud {
     public void setEstatura(double estatura) {
         this.estatura = estatura;
     }
+
+    public double getImc() {
+        return imc;
+    }
+
+    public void setImc(double imc) {
+        this.imc = imc;
+    }
     
-    public void guardar(){
-        //aqui pa guardar utice el dao que corresponde
+    
+    public void guardar(String cedula, Date fecha_reg, double peso, double estatura, int edad, double imc) throws Exception {
+        SaludDAO saludDAO = new SaludDAO();
+
+        try {
+            int filasAfectadas = Conexion.ejecutarActualizacion(
+                saludDAO.insertar(),
+                cedula,
+                new java.sql.Date(fecha_reg.getTime()),
+                peso,
+                estatura,
+                edad,
+                imc
+            );
+
+            if (filasAfectadas == 0) {
+                throw new Exception("No se insertó ninguna fila en la base de datos.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Error al insertar datos de salud: " + e.getMessage());
+        }
     }
-    public String mostrar(){
-        return "";
+
+    
+    public List<Salud> obtenerHistorial(String cedula) throws Exception {
         
+        SaludDAO saludDAO =new SaludDAO();
+        
+        List<Salud> lista = new ArrayList<>();
+        ResultSet rs = Conexion.ejecutarConsulta(saludDAO.mostrar(cedula));
+
+        while (rs.next()) {
+            Salud salud = new Salud();
+            salud.setFecha_reg(rs.getDate("fecha_reg"));
+            salud.setPeso(rs.getDouble("peso"));
+            salud.setEstatura(rs.getDouble("estatura"));
+            salud.setEdad(rs.getInt("edad"));
+            salud.setImc(rs.getDouble("imc"));
+            lista.add(salud);
+        }
+        return lista;
     }
+    public double calcularIMC(double peso, double estatura) {
+        double imc = peso / (estatura * estatura);
+        return imc;
+    }
+
+
+    
     
 }
